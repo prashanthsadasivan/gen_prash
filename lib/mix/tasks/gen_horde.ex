@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.GenHorde do
   use Mix.Task
 
-  def run(args, help \\ __MODULE__) do
+  def run(args) do
     module_name = case args do
       [module_name] -> validate_module_name(module_name)
       _ -> raise "Expected single argument that is a valid module name. got: #{inspect(args)}"
@@ -17,6 +17,17 @@ defmodule Mix.Tasks.GenHorde do
       {get_supervisor_template(), "#{dir}/horde_supervisor.ex"}
     ]
     |> Enum.map(fn {template, file_name} -> File.write!(file_name, EEx.eval_string(template, module_name: module_name)) end)
+    things_to_paste = 
+      """
+      children = [
+        # ... other deps
+        #{module_name}.DynSupervisor,
+        #{module_name}.DynRegistry,
+        #{module_name}.NodeListener,
+      ]
+      """
+
+    IO.puts("Add the following to your supervision tree: \n#{things_to_paste}")
   end
 
   def validate_module_name(module_name) do
@@ -28,7 +39,7 @@ defmodule Mix.Tasks.GenHorde do
 
   def get_node_listener_template do
     """
-    defmodule NodeListener do
+    defmodule <%= module_name %>.NodeListener do
       use GenServer
 
       def start_link(), do: GenServer.start_link(__MODULE__, [])
