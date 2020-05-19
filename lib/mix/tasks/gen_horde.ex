@@ -76,7 +76,7 @@ defmodule Mix.Tasks.GenHorde do
     defmodule <%= module_name %>.DynRegistry do
       use Horde.Registry
 
-      def start_link(init_arg, options \\ []) do
+      def start_link(init_arg, options \\\\ []) do
         Horde.Registry.start_link(__MODULE__, init_arg, name: __MODULE__)
       end
 
@@ -99,7 +99,7 @@ defmodule Mix.Tasks.GenHorde do
     defmodule <%= module_name %>.DynSupervisor do
       use Horde.DynamicSupervisor
 
-      def start_link(init_arg, options \\ []) do
+      def start_link(init_arg, options \\\\ []) do
         Horde.DynamicSupervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
       end
 
