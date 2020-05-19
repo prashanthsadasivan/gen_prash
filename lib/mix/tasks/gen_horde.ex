@@ -27,7 +27,7 @@ defmodule Mix.Tasks.GenHorde do
       ]
       """
 
-    IO.puts("Add the following to your supervision tree: \n#{things_to_paste}")
+    IO.puts("\n\nAdd the following to your supervision tree: \n#{things_to_paste}\n")
   end
 
   def validate_module_name(module_name) do
